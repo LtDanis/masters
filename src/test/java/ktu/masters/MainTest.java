@@ -21,7 +21,7 @@ class MainTest {
     private static final int TEST_PORT = 4569;
     private static final String BASE_URL = "http://localhost:" + TEST_PORT;
 
-    private static final SessionResponse SESSION_RESPONSE = new SessionResponse("ASFLJASLFGA");
+    private static final SessionResponse SESSION_RESPONSE = new SessionResponse("USER-2022");
 
     @BeforeAll
     static void beforeAll() {
@@ -33,13 +33,13 @@ class MainTest {
 
     @Test
     void acceptanceTest_sessionStarted() throws UnirestException {
-        String body = GSON.toJson(new SessionRequest(List.of(Database.MONGO)));
-        String expectedResponse = GSON.toJson(SESSION_RESPONSE);
+        SessionRequest sessionRequest =
+                new SessionRequest("USER", "test1", "col1", true, List.of(Database.MONGO));
 
         HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/start")
-                .body(body)
+                .body(GSON.toJson(sessionRequest))
                 .asJson();
 
-        assertThat(response.getBody().toString()).isEqualTo(expectedResponse);
+        assertThat(response.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
     }
 }
