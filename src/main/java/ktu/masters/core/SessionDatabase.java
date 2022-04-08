@@ -1,6 +1,6 @@
 package ktu.masters.core;
 
-import ktu.masters.dto.Database;
+import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.DbQueryResult;
 import ktu.masters.dto.QueryType;
 import ktu.masters.dto.SessionData;
@@ -26,7 +26,7 @@ public class SessionDatabase {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
         if (isNull(sessionData) || sessionData.getResults().isEmpty())
             throw new IllegalStateException("No session found with id - " + sessionId);
-        Map<Database, List<DbQueryResult>> collect = sessionData.getResults().stream()
+        Map<DatabaseType, List<DbQueryResult>> collect = sessionData.getResults().stream()
                 .collect(Collectors.groupingBy(DbQueryResult::getDb, toList()));
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s%n", key);

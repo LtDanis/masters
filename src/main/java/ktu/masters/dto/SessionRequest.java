@@ -10,5 +10,5 @@ public class SessionRequest {
     String fileName;
     String databaseName;
     boolean reloadDatabase;
-    List<Database> types;
+    List<DatabaseType> types;
 }

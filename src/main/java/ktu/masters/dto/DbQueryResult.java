@@ -6,6 +6,6 @@ import lombok.Value;
 public class DbQueryResult {
     String name;
     QueryType type;
-    Database db;
+    DatabaseType db;
     long timeTaken;
 }

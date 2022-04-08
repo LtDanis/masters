@@ -1,6 +1,6 @@
 package ktu.masters.core.handlers;
 
-import ktu.masters.dto.Database;
+import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.QueryType;
 import ktu.masters.dto.RunQueriesRequest;
 import ktu.masters.dto.RunQueriesRequest.Query;
@@ -21,7 +21,7 @@ class QueriesRunnerIntegrationTest {
     void testMongo() {
         String sessId = "ABC";
         RunQueriesRequest req = new RunQueriesRequest(sessId, "test", List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
-                new Query(Database.MONGO, "{ ord_qty: 501 }")
+                new Query(DatabaseType.MONGO, "{ ord_qty: 501 }")
         ))));
 
         SessionResponse resp = runner.handle(req);

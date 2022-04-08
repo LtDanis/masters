@@ -1,7 +1,7 @@
 package ktu.masters.core.handlers;
 
 import ktu.masters.core.Session;
-import ktu.masters.dto.Database;
+import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.SessionRequest;
 import ktu.masters.dto.SessionResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class SessionInitializer implements Handler<SessionRequest, SessionRespon
         return String.format("%s-%s", request.getUserId(), LocalDateTime.now());
     }
 
-    private void reloadDatabase(List<Database> types, String fileName, String databaseName) {
-        for (Database type : types)
+    private void reloadDatabase(List<DatabaseType> types, String fileName, String databaseName) {
+        for (DatabaseType type : types)
             findByType(type).reset(databaseName, fileName);
     }
 }

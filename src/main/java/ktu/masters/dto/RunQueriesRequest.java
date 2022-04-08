@@ -19,7 +19,7 @@ public class RunQueriesRequest {
 
     @Value
     public static class Query {
-        Database db;
+        DatabaseType db;
         String query;
     }
 }

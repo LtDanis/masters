@@ -6,7 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import ktu.masters.core.RouteFactory;
 import ktu.masters.core.utils.RouteController;
-import ktu.masters.dto.Database;
+import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.RunQueriesRequest;
 import ktu.masters.dto.SessionRequest;
 import ktu.masters.dto.SessionResponse;
@@ -36,7 +36,7 @@ class MainTest {
     @Test
     void acceptanceTest_sessionStarted() throws UnirestException {
         SessionRequest sessionRequest =
-                new SessionRequest("USER", "test1", "col1", true, List.of(Database.MONGO));
+                new SessionRequest("USER", "test1", "col1", true, List.of(DatabaseType.MONGO));
 
         HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/start")
                 .body(GSON.toJson(sessionRequest))
