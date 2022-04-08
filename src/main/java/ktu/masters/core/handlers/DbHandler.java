@@ -5,5 +5,5 @@ import ktu.masters.dto.Database;
 public interface DbHandler {
     Database getType();
 
-    void reset(String databaseName, String fileName);
+    void reset(String colName, String fileName);
 }
