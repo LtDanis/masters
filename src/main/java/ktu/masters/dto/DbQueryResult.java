@@ -9,5 +9,5 @@ public class DbQueryResult {
     String name;
     QueryType type;
     DatabaseType db;
-    List<Long> timesTaken;
+    List<String> timesTaken;
 }

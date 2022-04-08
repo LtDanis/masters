@@ -1,6 +1,5 @@
 package ktu.masters.core.handlers;
 
-import ktu.masters.core.Session;
 import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.SessionRequest;
 import ktu.masters.dto.SessionResponse;
@@ -14,9 +13,7 @@ import static ktu.masters.core.utils.HandlersHelper.findByType;
 @RequiredArgsConstructor
 public class SessionInitializer implements Handler<SessionRequest, SessionResponse> {
     public SessionResponse handle(SessionRequest request) {
-        Session.reset();
         SessionResponse sessionResponse = new SessionResponse(formatSessionId(request));
-        Session.setInitialData(request, sessionResponse);
         if (request.isReloadDatabase())
             reloadDatabase(request.getTypes(), request.getFileName(), request.getDatabaseName());
         return sessionResponse;

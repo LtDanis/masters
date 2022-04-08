@@ -12,11 +12,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class SessionDatabase {
     private static final Map<String, SessionData> SESSION_DATA_MAP = new ConcurrentHashMap<>();
+
+    public static void reset(String sessionId) {
+        SESSION_DATA_MAP.remove(sessionId);
+    }
 
     public static void saveTimeTaken(String sessionId, DbQueryResult queryResult) {
         SessionData sessionData = SESSION_DATA_MAP.computeIfAbsent(sessionId, id -> new SessionData());
@@ -32,7 +35,7 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s%n", key);
             value.forEach(result ->
-                    System.out.printf("  %s %s -> %s%n", result.getType(), result.getName(), reformatTimes(result.getTimesTaken())));
+                    System.out.printf("  %s %s -> %s%n", result.getType(), result.getName(), result.getTimesTaken()));
         });
     }
 
@@ -45,15 +48,15 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s %s %n", key.getName(), key.getType());
             value.forEach(result ->
-                    System.out.printf("  %s -> %s%n", result.getDb(), reformatTimes(result.getTimesTaken())));
+                    System.out.printf("  %s -> %s%n", result.getDb(), result.getTimesTaken()));
         });
     }
 
-    private static String reformatTimes(List<Long> times) {
+    public static List<String> reformatTimes(List<Long> times) {
         return times.stream()
                 .map(time -> time / 1000_000f)
                 .map(f -> String.format("%.3f", f))
-                .collect(joining(", "));
+                .collect(Collectors.toList());
     }
 
     public static List<DbQueryResult> getResultsJson(String sessionId) {
