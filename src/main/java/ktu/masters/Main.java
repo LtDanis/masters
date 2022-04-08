@@ -18,9 +18,11 @@ public class Main {
         Spark.port(port);
         Spark.init();
         Spark.defaultResponseTransformer(new JsonTransformer());
+        Spark.after((req, res) -> res.type("application/json"));
 
         Spark.post("/start", RouteController::handleSessionInit);
         Spark.post("/run", RouteController::runQueries);
+        Spark.get("/results/:sessionId", RouteController::readResults);
 
         exception(ApiException.class, (exception, request, response) -> {
             response.status(exception.getStatus());

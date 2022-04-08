@@ -56,6 +56,13 @@ public class SessionDatabase {
                 .collect(joining(", "));
     }
 
+    public static List<DbQueryResult> getResultsJson(String sessionId) {
+        SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
+        if (isNull(sessionData) || sessionData.getResults().isEmpty())
+            throw new IllegalStateException("No session found with id - " + sessionId);
+        return sessionData.getResults();
+    }
+
     @Value
     private static class QueryKey {
         String name;

@@ -1,6 +1,7 @@
 package ktu.masters.core.utils;
 
 import ktu.masters.core.RouteFactory;
+import ktu.masters.core.SessionDatabase;
 import ktu.masters.core.handlers.QueriesRunner;
 import ktu.masters.core.handlers.SessionInitializer;
 import ktu.masters.dto.RunQueriesRequest;
@@ -30,5 +31,9 @@ public class RouteController {
     public static Object runQueries(Request request, Response response) {
         RunQueriesRequest obj = GSON.fromJson(request.body(), RunQueriesRequest.class);
         return getFactory().getQueriesRunner().handle(obj);
+    }
+
+    public static Object readResults(Request request, Response response) {
+        return SessionDatabase.getResultsJson(request.params(":sessionId"));
     }
 }
