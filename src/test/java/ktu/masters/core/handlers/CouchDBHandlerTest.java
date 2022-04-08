@@ -14,7 +14,11 @@ class CouchDBHandlerTest {
 
     @Test
     void testRunQueries() {
-        String query = "{\n" +
+        couchDBHandler.runQuery("test", couchQuery(), 1);
+    }
+
+    static String couchQuery() {
+        return "{\n" +
                 "    \"selector\": {\n" +
                 "        \"_id\": \"5677d313fad7da08e362a512\"" +
                 "    },\n" +
@@ -23,6 +27,5 @@ class CouchDBHandlerTest {
                 "    \"skip\": 0,\n" +
                 "    \"execution_stats\": true\n" +
                 "}";
-        couchDBHandler.runQuery("test", query);
     }
 }

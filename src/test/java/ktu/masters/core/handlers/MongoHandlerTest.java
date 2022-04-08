@@ -14,6 +14,6 @@ class MongoHandlerTest {
 
     @Test
     void testRunQueries() {
-        mongoHandler.runQuery("test", "{ _id: \"5677d313fad7da08e362a512\" }");
+        mongoHandler.runQuery("test", "{ _id: \"5677d313fad7da08e362a512\" }", 1);
     }
 }

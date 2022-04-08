@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class SessionDatabase {
@@ -31,7 +32,7 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s%n", key);
             value.forEach(result ->
-                    System.out.printf("  %s %s -> %.3f%n", result.getType(), result.getName(), result.getTimeTaken() / 1000_000f));
+                    System.out.printf("  %s %s -> %s%n", result.getType(), result.getName(), reformatTimes(result.getTimesTaken())));
         });
     }
 
@@ -44,8 +45,15 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s %s %n", key.getName(), key.getType());
             value.forEach(result ->
-                    System.out.printf("  %s -> %.3f%n", result.getDb(), result.getTimeTaken() / 1000_000f));
+                    System.out.printf("  %s -> %s%n", result.getDb(), reformatTimes(result.getTimesTaken())));
         });
+    }
+
+    private static String reformatTimes(List<Long> times) {
+        return times.stream()
+                .map(time -> time / 1000_000f)
+                .map(f -> String.format("%.3f", f))
+                .collect(joining(", "));
     }
 
     @Value

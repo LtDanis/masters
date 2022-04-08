@@ -12,16 +12,18 @@ import java.util.List;
 
 import static ktu.masters.core.SessionDatabase.printByDb;
 import static ktu.masters.core.SessionDatabase.printByQuery;
+import static ktu.masters.core.handlers.CouchDBHandlerTest.couchQuery;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QueriesRunnerIntegrationTest {
     private final QueriesRunner runner = new QueriesRunner();
 
     @Test
-    void testMongo() {
+    void happyPath() {
         String sessId = "ABC";
-        RunQueriesRequest req = new RunQueriesRequest(sessId, "test", List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
-                new Query(DatabaseType.MONGO, "{ ord_qty: 501 }")
+        RunQueriesRequest req = new RunQueriesRequest(sessId, "test", 2, List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
+                new Query(DatabaseType.MONGO, "{ ord_qty: 501 }"),
+                new Query(DatabaseType.COUCH_DB, couchQuery())
         ))));
 
         SessionResponse resp = runner.handle(req);

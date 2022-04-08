@@ -47,7 +47,7 @@ class MainTest {
 
     @Test
     void acceptanceTest_queriesRun() throws UnirestException {
-        RunQueriesRequest sessionRequest = new RunQueriesRequest("ABC", "test", List.of());
+        RunQueriesRequest sessionRequest = new RunQueriesRequest("ABC", "test", 1, List.of());
 
         HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/run")
                 .body(GSON.toJson(sessionRequest))

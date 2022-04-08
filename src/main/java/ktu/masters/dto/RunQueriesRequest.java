@@ -8,6 +8,7 @@ import java.util.List;
 public class RunQueriesRequest {
     String sessionId;
     String colName;
+    int numberOfRuns;
     List<QuerySet> querySet;
 
     @Value
