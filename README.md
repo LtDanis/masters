@@ -3,6 +3,10 @@
 - Start containers before starting API
 - Run main() and send API requests to init benchmarking
 
+##Requirements
+- Java11
+- Docker
+
 ##Mongo commands
     create mongodb database:
     docker run --name mongoDB -p 27888:27017 -d mongo
