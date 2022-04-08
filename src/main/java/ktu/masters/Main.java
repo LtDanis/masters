@@ -20,6 +20,7 @@ public class Main {
         Spark.defaultResponseTransformer(new JsonTransformer());
 
         Spark.post("/start", RouteController::handleSessionInit);
+        Spark.post("/run", RouteController::runQueries);
 
         exception(ApiException.class, (exception, request, response) -> {
             response.status(exception.getStatus());

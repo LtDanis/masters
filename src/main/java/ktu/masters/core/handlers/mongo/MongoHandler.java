@@ -2,13 +2,13 @@ package ktu.masters.core.handlers.mongo;
 
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.InsertOneModel;
 import ktu.masters.core.handlers.DbHandler;
 import ktu.masters.dto.Database;
 import org.bson.Document;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -50,6 +50,17 @@ public class MongoHandler implements DbHandler {
         }
     }
 
+    @Override
+    public long runQuery(String colName, String query) {
+        long start = System.nanoTime();
+        try (MongoCursor<Document> cursor = dbCon.getCollection(colName).find(Document.parse(query)).iterator()) {
+            while (cursor.hasNext()) {
+                System.out.println(cursor.next().toJson());
+            }
+        }
+        return System.nanoTime() - start;
+    }
+
     private void bulkWrite(String fileName, MongoCollection<Document> coll, List<InsertOneModel<Document>> docs) throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             writeFromFile(coll, br, docs);
@@ -64,7 +75,7 @@ public class MongoHandler implements DbHandler {
                                BufferedReader br,
                                List<InsertOneModel<Document>> docs) throws Exception {
         JSONParser parser = new JSONParser();
-        JSONArray json = (JSONArray) parser.parse(br);
+        @SuppressWarnings("unchecked") List<JSONObject> json = (List<JSONObject>) parser.parse(br);
         Iterator<JSONObject> iterator = json.iterator();
         int count = 0;
         while (iterator.hasNext()) {

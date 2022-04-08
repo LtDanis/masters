@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import ktu.masters.core.RouteFactory;
 import ktu.masters.core.utils.RouteController;
 import ktu.masters.dto.Database;
+import ktu.masters.dto.RunQueriesRequest;
 import ktu.masters.dto.SessionRequest;
 import ktu.masters.dto.SessionResponse;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +27,7 @@ class MainTest {
     @BeforeAll
     static void beforeAll() {
         RouteController.setFactory(new RouteFactory(
+                req -> SESSION_RESPONSE,
                 req -> SESSION_RESPONSE
         ));
         new Main().start(TEST_PORT);
@@ -37,6 +39,17 @@ class MainTest {
                 new SessionRequest("USER", "test1", "col1", true, List.of(Database.MONGO));
 
         HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/start")
+                .body(GSON.toJson(sessionRequest))
+                .asJson();
+
+        assertThat(response.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
+    }
+
+    @Test
+    void acceptanceTest_queriesRun() throws UnirestException {
+        RunQueriesRequest sessionRequest = new RunQueriesRequest("ABC", "test", List.of());
+
+        HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/run")
                 .body(GSON.toJson(sessionRequest))
                 .asJson();
 
