@@ -2,11 +2,17 @@
 - Java project, but the databases are in from Docker containers
 - Start containers before starting API
 - Run main() and send API requests to init benchmarking
-
+---
+##Included
+- Coverage over 80%
+- NO_BENCH data generator
+- Database loader
+- Qery runner
+---
 ##Requirements
 - Java11
 - Docker
-
+---
 ##Mongo commands
     create mongodb database:
     docker run --name mongoDB -p 27888:27017 -d mongo
@@ -27,8 +33,8 @@
     docker ps                                           -> active containers 
     docker container ls --all                           -> all container
     docker rm -f containerName                          -> delete existing container
-
-###cURL for API
+---
+###cURL for APIs
 ####Init databases
 ```
 curl --location --request POST 'http://localhost:4567/start' \
@@ -86,4 +92,3 @@ curl --location --request GET 'http://localhost:4567/results/USER-2022-04-08T17:
 ```
 curl --location --request GET 'http://localhost:4567/generate/USER-2022-04-08T17:09:32.181411'
 ```
-
