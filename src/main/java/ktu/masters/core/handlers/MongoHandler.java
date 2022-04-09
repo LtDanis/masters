@@ -68,8 +68,7 @@ public class MongoHandler implements DbHandler {
     private void writeFromFile(MongoCollection<Document> coll,
                                BufferedReader br,
                                List<InsertOneModel<Document>> docs) throws Exception {
-        JSONParser parser = new JSONParser();
-        @SuppressWarnings("unchecked") List<JSONObject> json = (List<JSONObject>) parser.parse(br);
+        @SuppressWarnings("unchecked") List<JSONObject> json = (List<JSONObject>) new JSONParser().parse(br);
         Iterator<JSONObject> iterator = json.iterator();
         int count = 0;
         while (iterator.hasNext()) {

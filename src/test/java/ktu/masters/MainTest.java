@@ -5,11 +5,10 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import ktu.masters.core.RouteFactory;
+import ktu.masters.core.SessionDatabase;
 import ktu.masters.core.utils.RouteController;
-import ktu.masters.dto.DatabaseType;
-import ktu.masters.dto.RunQueriesRequest;
-import ktu.masters.dto.SessionRequest;
-import ktu.masters.dto.SessionResponse;
+import ktu.masters.dto.*;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -54,5 +53,16 @@ class MainTest {
                 .asJson();
 
         assertThat(response.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
+    }
+
+    @Test
+    void acceptanceTest_getResponse() throws UnirestException {
+        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"));
+        SessionDatabase.saveTimeTaken("ABC", queryResult);
+
+        HttpResponse<JsonNode> response = Unirest.get(BASE_URL + "/results/ABC").asJson();
+
+        JSONObject queryResultFromDb = (JSONObject) response.getBody().getArray().get(0);
+        assertThat(queryResultFromDb.get("name")).isEqualTo(queryResult.getName());
     }
 }
