@@ -3,18 +3,19 @@ package ktu.masters.core.handlers;
 import org.junit.jupiter.api.Test;
 
 import static ktu.masters.core.utils.HandlersHelper.COUCH_DB_CONN;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class CouchDBHandlerTest {
     private final CouchDBHandler couchDBHandler = new CouchDBHandler(COUCH_DB_CONN);
 
     @Test
     void testStart() {
-        couchDBHandler.reset("test", "/test.json");
+        assertDoesNotThrow(() -> couchDBHandler.reset("test", "/test.json"));
     }
 
     @Test
     void testRunQueries() {
-        couchDBHandler.runQuery("test", couchQuery(), 1);
+        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", couchQuery(), 1));
     }
 
     static String couchQuery() {

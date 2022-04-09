@@ -16,6 +16,10 @@
     docker run --name couchdb -p 5984:5984 -d bitnami/couchdb:latest
     default credentials -> admin couchdb
 
+##Aerospike commands
+    create aerospike database:
+    sudo docker run -d --name aerospike -p 3000-3002:3000-3002 aerospike:ce-5.7.0.16
+
 ##Docker commands
     docker start containerName                          -> start existing conatainer
     docker stop containerName                           -> stop existing conatainer
@@ -40,6 +44,7 @@ curl --location --request POST 'http://localhost:4567/start' \
     ]
 }'
 ```
+
 ####Run queries
 ```
 curl --location --request POST 'http://localhost:4567/run' \
@@ -65,8 +70,15 @@ curl --location --request POST 'http://localhost:4567/run' \
         }
     ]
 }'
+
 ```
 ####Get results
 ```
 curl --location --request GET 'http://localhost:4567/results/USER-2022-04-08T17:09:32.181411'
 ```
+
+####Generate csv
+```
+curl --location --request GET 'http://localhost:4567/generate/USER-2022-04-08T17:09:32.181411'
+```
+

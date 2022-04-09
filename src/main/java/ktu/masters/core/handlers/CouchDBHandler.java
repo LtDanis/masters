@@ -3,11 +3,11 @@ package ktu.masters.core.handlers;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import ktu.masters.dto.DatabaseType;
+import ktu.masters.exception.ApiException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -31,7 +31,6 @@ public class CouchDBHandler implements DbHandler {
         for (Object item : docs) {
             System.out.println(item);
         }
-
     }
 
     @Override
@@ -44,10 +43,10 @@ public class CouchDBHandler implements DbHandler {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(requireNonNull(this.getClass().getResourceAsStream(fileName))))) {
                 writeFromFile(br, database);
             } catch (IOException | ParseException IOEx) {
-                throw new IllegalStateException(IOEx);
+                throw new ApiException(500, IOEx, "Failed to load file for couchdb");
             }
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            throw new ApiException(500, e, "Failed to load file for couchdb");
         }
     }
 

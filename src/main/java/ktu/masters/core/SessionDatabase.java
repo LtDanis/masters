@@ -4,6 +4,7 @@ import ktu.masters.dto.DatabaseType;
 import ktu.masters.dto.DbQueryResult;
 import ktu.masters.dto.QueryType;
 import ktu.masters.dto.SessionData;
+import ktu.masters.exception.ApiException;
 import lombok.Value;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class SessionDatabase {
     public static void printByDb(String sessionId) {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
         if (isNull(sessionData) || sessionData.getResults().isEmpty())
-            throw new IllegalStateException("No session found with id - " + sessionId);
+            throw new ApiException(400, "No session found with id - " + sessionId);
         Map<DatabaseType, List<DbQueryResult>> collect = sessionData.getResults().stream()
                 .collect(Collectors.groupingBy(DbQueryResult::getDb, toList()));
         collect.forEach((key, value) -> {
@@ -42,7 +43,7 @@ public class SessionDatabase {
     public static void printByQuery(String sessionId) {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
         if (isNull(sessionData) || sessionData.getResults().isEmpty())
-            throw new IllegalStateException("No session found with id - " + sessionId);
+            throw new ApiException(400, "No session found with id - " + sessionId);
         Map<QueryKey, List<DbQueryResult>> collect = sessionData.getResults().stream()
                 .collect(Collectors.groupingBy(QueryKey::of, toList()));
         collect.forEach((key, value) -> {
@@ -59,10 +60,10 @@ public class SessionDatabase {
                 .collect(Collectors.toList());
     }
 
-    public static List<DbQueryResult> getResultsJson(String sessionId) {
+    public static List<DbQueryResult> getResultsList(String sessionId) {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
         if (isNull(sessionData) || sessionData.getResults().isEmpty())
-            throw new IllegalStateException("No session found with id - " + sessionId);
+            throw new ApiException(400, "No session found with id - " + sessionId);
         return sessionData.getResults();
     }
 

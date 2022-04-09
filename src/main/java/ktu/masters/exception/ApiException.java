@@ -13,6 +13,11 @@ public class ApiException extends RuntimeException {
         this.errorModel = new ErrorModel(status, msg);
     }
 
+    public ApiException(int status, Exception cause, String msg) {
+        super(cause);
+        this.errorModel = new ErrorModel(status, msg);
+    }
+
     public String toJson() {
         return GSON.toJson(errorModel);
     }

@@ -1,10 +1,12 @@
 package ktu.masters.core.utils;
 
+import com.aerospike.client.AerospikeClient;
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import ktu.masters.core.handlers.AerospikeDBHandler;
 import ktu.masters.core.handlers.CouchDBHandler;
 import ktu.masters.core.handlers.DbHandler;
 import ktu.masters.core.handlers.MongoHandler;
@@ -20,10 +22,12 @@ import java.util.List;
 public class HandlersHelper {
     public static final MongoDatabase MONGO_DB_CONN = initMongoDbConn();
     public static final CloudantClient COUCH_DB_CONN = initCouchConnection();
+    public static final AerospikeClient AEROSPIKE_DB_CONN = new AerospikeClient("127.0.0.1", 3000);
 
     private static final List<DbHandler> DB_HANDLERS = List.of(
             new MongoHandler(MONGO_DB_CONN),
-            new CouchDBHandler(COUCH_DB_CONN)
+            new CouchDBHandler(COUCH_DB_CONN),
+            new AerospikeDBHandler(AEROSPIKE_DB_CONN)
     );
 
     public static DbHandler findByType(DatabaseType type) {
@@ -46,7 +50,7 @@ public class HandlersHelper {
                     .disableSSLAuthentication()
                     .build();
         } catch (MalformedURLException e) {
-            throw new IllegalStateException(e);
+            throw new ApiException(500, e, "Failed to init couchdb connection");
         }
     }
 }

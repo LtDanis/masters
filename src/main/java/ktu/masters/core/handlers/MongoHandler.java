@@ -7,6 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.InsertOneModel;
 import ktu.masters.dto.DatabaseType;
+import ktu.masters.exception.ApiException;
 import org.bson.Document;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,7 +42,7 @@ public class MongoHandler implements DbHandler {
         try {
             bulkWrite(fileName, coll, docs);
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            throw new ApiException(500, e, "Failed to reset MongoDB");
         }
     }
 
