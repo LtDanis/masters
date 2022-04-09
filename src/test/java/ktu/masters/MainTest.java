@@ -65,4 +65,14 @@ class MainTest {
         JSONObject queryResultFromDb = (JSONObject) response.getBody().getArray().get(0);
         assertThat(queryResultFromDb.get("name")).isEqualTo(queryResult.getName());
     }
+
+    @Test
+    void acceptanceTest_getNonExistingResponse() throws UnirestException {
+        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"));
+        SessionDatabase.saveTimeTaken("NOT_FOUND", queryResult);
+
+        HttpResponse<JsonNode> response = Unirest.get(BASE_URL + "/results/ABC").asJson();
+
+        assertThat(response.getStatus()).isEqualTo(400);
+    }
 }

@@ -1,8 +1,10 @@
 package ktu.masters.core.handlers;
 
+import ktu.masters.exception.ApiException;
 import org.junit.jupiter.api.Test;
 
 import static ktu.masters.core.utils.HandlersHelper.MONGO_DB_CONN;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class MongoHandlerTest {
@@ -12,6 +14,13 @@ class MongoHandlerTest {
     void testStart() {
         assertDoesNotThrow(() -> mongoHandler.reset("test", "/test.json"));
     }
+
+    @Test
+    void testStart_nonExistingFile() {
+        assertThatThrownBy(() -> mongoHandler.reset("test", "/notFound.json"))
+                .isInstanceOf(ApiException.class);
+    }
+
 
     @Test
     void testRunQueries() {
