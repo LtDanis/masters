@@ -23,7 +23,8 @@ class QueriesRunnerIntegrationTest {
         String sessId = "ABC";
         RunQueriesRequest req = new RunQueriesRequest(sessId, "test", 2, List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
                 new Query(DatabaseType.MONGO, "{ ord_qty: 501 }"),
-                new Query(DatabaseType.COUCH_DB, couchQuery())
+                new Query(DatabaseType.COUCH_DB, couchQuery()),
+                new Query(DatabaseType.AEROSPIKE, "$.*")
         ))));
 
         SessionResponse resp = runner.handle(req);
