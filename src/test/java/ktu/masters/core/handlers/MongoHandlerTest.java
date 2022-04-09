@@ -12,7 +12,7 @@ class MongoHandlerTest {
 
     @Test
     void testStart() {
-        assertDoesNotThrow(() -> mongoHandler.reset("test", "/NO_BENCH_TEST.json"));
+        assertDoesNotThrow(() -> mongoHandler.reset("test", "/test.json"));
     }
 
     @Test
