@@ -3,10 +3,7 @@ package ktu.masters;
 import ktu.masters.core.utils.JsonTransformer;
 import ktu.masters.core.utils.RouteController;
 import ktu.masters.exception.ApiException;
-import org.apache.log4j.PropertyConfigurator;
 import spark.Spark;
-
-import java.util.Properties;
 
 import static java.util.Objects.isNull;
 import static spark.Spark.exception;
@@ -19,8 +16,6 @@ public class Main {
     }
 
     public void start(int port) {
-        setupLogger();
-
         Spark.port(port);
         Spark.init();
         Spark.defaultResponseTransformer(new JsonTransformer());
@@ -38,12 +33,5 @@ public class Main {
             response.status(exception.getStatus());
             response.body(exception.toJson());
         });
-    }
-
-    private void setupLogger() {
-        Properties prop = new Properties();
-        prop.setProperty("log4j.rootLogger", "WARN");
-        prop.setProperty("spark.http.matching.GeneralError", "WARN");
-        PropertyConfigurator.configure(prop);
     }
 }
