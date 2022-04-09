@@ -40,7 +40,8 @@ curl --location --request POST 'http://localhost:4567/start' \
     "reloadDatabase": false,
     "types": [
         "MONGO",
-        "COUCH_DB"
+        "COUCH_DB",
+        "AEROSPIKE"
     ]
 }'
 ```
@@ -65,6 +66,10 @@ curl --location --request POST 'http://localhost:4567/run' \
                 {
                     "db": "COUCH_DB",
                     "query": "{\n    \"selector\": {\n        \"_id\": \"5677d313fad7da08e362a512\"    },\n    \"fields\": [\"_id\", \"_rev\"],\n    \"limit\": 1,\n    \"skip\": 0,\n    \"execution_stats\": true\n}"
+                },
+                {
+                    "db": "AEROSPIKE",
+                    "query": "$.*"
                 }
             ]
         }
