@@ -30,6 +30,7 @@ public class Main {
         Spark.get("/generate/:sessionId", RouteController::generateCsv);
 
         exception(ApiException.class, (exception, request, response) -> {
+            response.type("application/json");
             response.status(exception.getStatus());
             response.body(exception.toJson());
         });
