@@ -7,7 +7,7 @@
 - Coverage over 80%
 - NO_BENCH data generator
 - Database loader
-- Qery runner
+- Query runner
 ---
 ##Requirements
 - Java11

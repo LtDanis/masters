@@ -15,19 +15,19 @@ class NoBenchDataGeneratorTest {
 
     @Test
     void testSave() {
-        assertDoesNotThrow(() -> generator.generateAndSave(1000000L, "NO_BENCH_TEST"));
+        assertDoesNotThrow(() -> generator.generateAndSave(1000000, "NO_BENCH_TEST"));
     }
 
     @Test
     void testOne() {
-        List<JsonNode> actual = generator.generate(1L);
+        List<JsonNode> actual = generator.generate(1);
 
         assertThat(actual).hasSize(1);
     }
 
     @Test
     void testOneThousand() {
-        List<JsonNode> actual = generator.generate(1000L);
+        List<JsonNode> actual = generator.generate(1000);
 
         assertThat(actual).hasSize(1000);
         assertThat(actual)
@@ -41,7 +41,7 @@ class NoBenchDataGeneratorTest {
     @Test
     @Timeout(value = 10)
     void testOneMillion() {
-        List<JsonNode> actual = generator.generate(1000_000L);
+        List<JsonNode> actual = generator.generate(1000_000);
 
         assertThat(actual).hasSize(1000000);
     }
