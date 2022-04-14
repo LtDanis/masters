@@ -19,7 +19,9 @@ class MongoHandlerTest {
     void testStart_nonExistingFile() {
         assertThatThrownBy(() -> mongoHandler.reset("test", "/notFound.json"))
                 .isInstanceOf(ApiException.class)
-                .hasMessage("Failed to reset MongoDB");
+                .extracting(ex -> (ApiException) ex)
+                .extracting(ApiException::getMessage)
+                .isEqualTo("Failed to reset MongoDB");
     }
 
 
