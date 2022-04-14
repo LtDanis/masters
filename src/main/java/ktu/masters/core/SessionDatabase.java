@@ -1,9 +1,6 @@
 package ktu.masters.core;
 
-import ktu.masters.dto.DatabaseType;
-import ktu.masters.dto.DbQueryResult;
-import ktu.masters.dto.QueryType;
-import ktu.masters.dto.SessionData;
+import ktu.masters.dto.*;
 import ktu.masters.exception.ApiException;
 import lombok.Value;
 
@@ -16,7 +13,19 @@ import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
 public class SessionDatabase {
+    private static final Map<String, RunQueriesRequest> QUERIES_DATA_MAP = new ConcurrentHashMap<>();
     private static final Map<String, SessionData> SESSION_DATA_MAP = new ConcurrentHashMap<>();
+
+    public static void saveRequest(RunQueriesRequest request) {
+        QUERIES_DATA_MAP.put(request.getSessionId(), request);
+    }
+
+    public static RunQueriesRequest getRequest(String sessionId) {
+        RunQueriesRequest request = QUERIES_DATA_MAP.get(sessionId);
+        if (isNull(request))
+            throw new ApiException(400, "No session found with id - " + sessionId);
+        return request;
+    }
 
     public static void reset(String sessionId) {
         SESSION_DATA_MAP.remove(sessionId);

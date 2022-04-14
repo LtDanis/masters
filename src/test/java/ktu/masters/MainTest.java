@@ -21,7 +21,8 @@ class MainTest {
     private static final int TEST_PORT = 4569;
     private static final String BASE_URL = "http://localhost:" + TEST_PORT;
 
-    private static final SessionResponse SESSION_RESPONSE = new SessionResponse("USER-2022");
+    private static final String SESSION_ID = "USER-2022";
+    private static final SessionResponse SESSION_RESPONSE = new SessionResponse(SESSION_ID);
 
     @BeforeAll
     static void beforeAll() {
@@ -46,13 +47,27 @@ class MainTest {
 
     @Test
     void acceptanceTest_queriesRun() throws UnirestException {
-        RunQueriesRequest sessionRequest = new RunQueriesRequest("ABC", "test", 1, List.of());
+        RunQueriesRequest sessionRequest = new RunQueriesRequest("USER-2022", "test", 1, List.of());
 
-        HttpResponse<JsonNode> response = Unirest.post(BASE_URL + "/run")
+        HttpResponse<JsonNode> responsePrepare = Unirest.post(BASE_URL + "/prepare")
                 .body(GSON.toJson(sessionRequest))
                 .asJson();
 
-        assertThat(response.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
+        HttpResponse<JsonNode> responseRunAll = Unirest.post(BASE_URL + "/run/" + SESSION_ID)
+                .body(GSON.toJson(sessionRequest))
+                .asJson();
+
+        assertThat(responsePrepare.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
+        assertThat(responseRunAll.getBody().toString()).isEqualTo(GSON.toJson(SESSION_RESPONSE));
+    }
+
+    @Test
+    void acceptanceTest_queryRun() throws UnirestException {
+        HttpResponse<String> response = Unirest.post(BASE_URL + "/run/test/MONGO")
+                .body("{ _id: \"5677d313fad7da08e362a512\" }")
+                .asString();
+
+        assertThat(Long.parseLong(response.getBody())).isBetween(0L, 100_000_000L);
     }
 
     @Test

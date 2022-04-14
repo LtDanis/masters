@@ -15,7 +15,7 @@ class NoBenchDataGeneratorTest {
 
     @Test
     void testSave() {
-        assertDoesNotThrow(() -> generator.generateAndSave(1000000, "NO_BENCH_TEST"));
+        assertDoesNotThrow(() -> generator.generateAndSave(10, "NO_BENCH_TEST"));
     }
 
     @Test
@@ -39,7 +39,7 @@ class NoBenchDataGeneratorTest {
     }
 
     @Test
-    @Timeout(value = 10)
+    @Timeout(value = 30)
     void testOneMillion() {
         List<JsonNode> actual = generator.generate(1000_000);
 
