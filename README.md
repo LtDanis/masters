@@ -81,8 +81,8 @@ curl --location --request POST 'http://localhost:4567/run' \
         }
     ]
 }'
-
 ```
+
 ####Get results
 ```
 curl --location --request GET 'http://localhost:4567/results/USER-2022-04-08T17:09:32.181411'
@@ -92,3 +92,6 @@ curl --location --request GET 'http://localhost:4567/results/USER-2022-04-08T17:
 ```
 curl --location --request GET 'http://localhost:4567/generate/USER-2022-04-08T17:09:32.181411'
 ```
+
+####criterion
+    sudo apt-get install libghc-criterion-dev

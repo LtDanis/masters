@@ -27,7 +27,7 @@ public class Main {
         Spark.post("/start", RouteController::handleSessionInit);
         Spark.post("/prepare", RouteController::prepareQueries);
         Spark.post("/run/:sessionId", RouteController::runQueries);
-        Spark.post("/run/:colName/:dbType", RouteController::runQuery);
+        Spark.post("/run/:dbType/:colName", RouteController::runQuery);
         Spark.get("/results/:sessionId", RouteController::readResults);
         Spark.get("/generate/:sessionId", RouteController::generateCsv);
 
