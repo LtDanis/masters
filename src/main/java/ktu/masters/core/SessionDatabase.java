@@ -43,7 +43,8 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s%n", key);
             value.forEach(result ->
-                    System.out.printf("  %s %s -> %s%n", result.getDb(), result.getName(), result.getAvg()));
+                    System.out.printf("  %s %s -> %s (%ss)%n",
+                            result.getDb(), result.getName(), result.getAvg(), nanosToSeconds(result.getAvg())));
         });
     }
 
@@ -78,6 +79,10 @@ public class SessionDatabase {
                 .map(time -> time / 1000_000f)
                 .map(f -> String.format("%.3f", f))
                 .collect(Collectors.toList());
+    }
+
+    private static String nanosToSeconds(long nanos) {
+        return String.format("%.6f", nanos / 1000_000_000f);
     }
 
     public static List<DbQueryResult> getResultsList(String sessionId) {

@@ -1,6 +1,7 @@
 package ktu.masters.core.handlers;
 
 import com.mongodb.bulk.BulkWriteResult;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -20,7 +21,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.mongodb.client.model.Projections.fields;
+import static com.mongodb.client.model.Projections.include;
 import static java.util.Objects.requireNonNull;
+import static ktu.masters.core.utils.Helper.CONSUMER_FUNCTION;
 
 public class MongoHandler implements DbHandler {
     private final MongoDatabase dbCon;
@@ -47,12 +51,24 @@ public class MongoHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, String query, String sessionId) {
-        try (MongoCursor<Document> cursor = dbCon.getCollection(colName).find(Document.parse(query)).iterator()) {
+    public void run(String colName, List<String> query, String sessionId) {
+        try (MongoCursor<Document> cursor = getCursor(colName, query).iterator()) {
             while (cursor.hasNext()) {
-                System.out.println(cursor.next().toJson());
+                CONSUMER_FUNCTION.accept(cursor.next().toJson());
             }
         }
+    }
+
+    private FindIterable<Document> getCursor(String colName, List<String> query) {
+        FindIterable<Document> findIterable = dbCon.getCollection(colName)
+                .find(Document.parse(query.get(0)));
+        if (query.size() == 1)
+            return findIterable;
+        return findIterable.projection(fields(include(getFields(query))));
+    }
+
+    private String[] getFields(List<String> query) {
+        return query.subList(1, query.size()).toArray(new String[]{});
     }
 
     private void bulkWrite(String fileName, MongoCollection<Document> coll, List<InsertOneModel<Document>> docs) throws Exception {

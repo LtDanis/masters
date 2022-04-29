@@ -67,15 +67,15 @@ curl --location --request POST 'http://localhost:4567/run' \
             "queries": [
                 {
                     "db": "MONGO",
-                    "query": "{ ord_qty: 501 }"
+                    "query": ["{ ord_qty: 501 }"]
                 },
                 {
                     "db": "COUCH_DB",
-                    "query": "{\n    \"selector\": {\n        \"_id\": \"5677d313fad7da08e362a512\"    },\n    \"fields\": [\"_id\", \"_rev\"],\n    \"limit\": 1,\n    \"skip\": 0,\n    \"execution_stats\": true\n}"
+                    "query": ["{\n    \"selector\": {\n        \"_id\": \"5677d313fad7da08e362a512\"    },\n    \"fields\": [\"_id\", \"_rev\"],\n    \"limit\": 1,\n    \"skip\": 0,\n    \"execution_stats\": true\n}"]
                 },
                 {
                     "db": "AEROSPIKE",
-                    "query": "$.*"
+                    "query": ["$.*"]
                 }
             ]
         }

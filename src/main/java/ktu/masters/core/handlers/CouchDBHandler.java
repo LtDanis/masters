@@ -12,6 +12,7 @@ import java.io.*;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
+import static ktu.masters.core.utils.Helper.CONSUMER_FUNCTION;
 
 public class CouchDBHandler implements DbHandler {
     private final CloudantClient dbConn;
@@ -26,10 +27,10 @@ public class CouchDBHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, String query, String sessionId) {
+    public void run(String colName, List<String> query, String sessionId) {
         Database database = dbConn.database(colName, true);
-        List<Object> docs = database.query(query, Object.class).getDocs();
-        docs.forEach(System.out::println);
+        List<Object> docs = database.query(query.get(0), Object.class).getDocs();
+        docs.forEach(CONSUMER_FUNCTION);
     }
 
     @Override

@@ -2,6 +2,8 @@ package ktu.masters.core.handlers;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static ktu.masters.core.utils.HandlersHelper.COUCH_DB_CONN;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -15,7 +17,7 @@ class CouchDBHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", couchQuery(), 1, "sessionId"));
+        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", List.of(couchQuery()), 1, "sessionId"));
     }
 
     static String couchQuery() {

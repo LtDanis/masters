@@ -3,6 +3,8 @@ package ktu.masters.core.handlers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static ktu.masters.core.handlers.QueriesHelper.initKeys;
 import static ktu.masters.core.utils.HandlersHelper.AEROSPIKE_DB_CONN;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -23,6 +25,6 @@ class AerospikeDBHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> aerospikeDBHandler.runQuery("test", "$.*", 1, SESSION_ID));
+        assertDoesNotThrow(() -> aerospikeDBHandler.runQuery("test", List.of("$.*"), 1, SESSION_ID));
     }
 }

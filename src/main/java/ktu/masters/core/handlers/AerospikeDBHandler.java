@@ -30,6 +30,7 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
+import static ktu.masters.core.utils.Helper.CONSUMER_FUNCTION;
 
 public class AerospikeDBHandler implements DbHandler {
     private static final String FILENAME = "store";
@@ -105,14 +106,14 @@ public class AerospikeDBHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, String query, String sessionId) {
+    public void run(String colName, List<String> query, String sessionId) {
         try {
             if (isNull(sessionId))
                 throw new ApiException(400, "Aerospike cannot run queries with session ID");
             for (Key key : loadKeys(sessionId)) {
                 @SuppressWarnings("unchecked") List<Map<String, Object>> objectsFromDB =
-                        (List<Map<String, Object>>) documentClient.get(key, colName, query);
-                objectsFromDB.forEach(System.out::println);
+                        (List<Map<String, Object>>) documentClient.get(key, colName, query.get(0));
+                objectsFromDB.forEach(CONSUMER_FUNCTION);
             }
         } catch (JsonParseException | JsonProcessingException | DocumentApiException e) {
             throw new ApiException(500, e, "Failed to fetch Aerospike query");

@@ -21,6 +21,6 @@ public class RunQueriesRequest {
     @Value
     public static class Query {
         DatabaseType db;
-        String query;
+        List<String> query;
     }
 }

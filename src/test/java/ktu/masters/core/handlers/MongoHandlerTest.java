@@ -3,6 +3,8 @@ package ktu.masters.core.handlers;
 import ktu.masters.exception.ApiException;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static ktu.masters.core.utils.HandlersHelper.MONGO_DB_CONN;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -27,6 +29,6 @@ class MongoHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> mongoHandler.runQuery("test", "{ _id: \"5677d313fad7da08e362a512\" }", 1, "sessionId"));
+        assertDoesNotThrow(() -> mongoHandler.runQuery("test", List.of("{ _id: \"5677d313fad7da08e362a512\" }"), 1, "sessionId"));
     }
 }
