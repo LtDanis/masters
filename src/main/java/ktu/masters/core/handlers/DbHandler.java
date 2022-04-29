@@ -12,19 +12,20 @@ public interface DbHandler {
 
     DatabaseType getType();
 
-    void reset(String colName, String fileName);
+    void reset(String colName, String fileName, String sessionId);
 
-    void run(String colName, String query);
+    void run(String colName, String query, String sessionId);
 
-    default List<Long> runQuery(String colName, String query, int times) {
+    default List<Long> runQuery(String colName, String query, int times, String sessionId) {
         return IntStream.range(0, times)
-                .mapToObj(index -> singleRun(colName, query))
+                .mapToObj(index -> singleRun(colName, query, sessionId))
                 .collect(toList());
     }
 
-    private long singleRun(String colName, String query) {
+    private long singleRun(String colName, String query, String sessionId) {
         long start = System.nanoTime();
-        run(colName, query);
+        run(colName, query,
+                sessionId);
         return System.nanoTime() - start;
     }
 }

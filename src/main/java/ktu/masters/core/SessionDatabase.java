@@ -36,6 +36,17 @@ public class SessionDatabase {
         sessionData.getResults().add(queryResult);
     }
 
+    public static void printAverageTimeTaken(String sessionId) {
+        SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
+        Map<QueryType, List<DbQueryResult>> collect = sessionData.getResults().stream()
+                .collect(Collectors.groupingBy(DbQueryResult::getType, toList()));
+        collect.forEach((key, value) -> {
+            System.out.printf("Result times in milliseconds for %s%n", key);
+            value.forEach(result ->
+                    System.out.printf("  %s %s -> %s%n", result.getDb(), result.getName(), result.getAvg()));
+        });
+    }
+
     public static void printByDb(String sessionId) {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
         if (isNull(sessionData) || sessionData.getResults().isEmpty())

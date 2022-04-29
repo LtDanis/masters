@@ -72,7 +72,7 @@ class MainTest {
 
     @Test
     void acceptanceTest_getResponse() throws UnirestException {
-        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"));
+        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"), 7);
         SessionDatabase.saveTimeTaken("ABC", queryResult);
 
         HttpResponse<JsonNode> response = Unirest.get(BASE_URL + "/results/ABC").asJson();
@@ -83,7 +83,7 @@ class MainTest {
 
     @Test
     void acceptanceTest_getNonExistingResponse() throws UnirestException {
-        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"));
+        DbQueryResult queryResult = new DbQueryResult("q1", QueryType.SEARCH, DatabaseType.MONGO, List.of("1"), 7);
         SessionDatabase.saveTimeTaken("NOT_FOUND", queryResult);
 
         HttpResponse<JsonNode> response = Unirest.get(BASE_URL + "/results/ABC").asJson();

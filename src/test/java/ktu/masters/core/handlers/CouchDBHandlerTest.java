@@ -10,12 +10,12 @@ class CouchDBHandlerTest {
 
     @Test
     void testStart() {
-        assertDoesNotThrow(() -> couchDBHandler.reset("test", "/test.json"));
+        assertDoesNotThrow(() -> couchDBHandler.reset("test", "/test.json", "sessionId"));
     }
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", couchQuery(), 1));
+        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", couchQuery(), 1, "sessionId"));
     }
 
     static String couchQuery() {

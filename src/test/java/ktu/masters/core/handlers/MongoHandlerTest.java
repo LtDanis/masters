@@ -12,12 +12,12 @@ class MongoHandlerTest {
 
     @Test
     void testStart() {
-        assertDoesNotThrow(() -> mongoHandler.reset("test", "/test.json"));
+        assertDoesNotThrow(() -> mongoHandler.reset("test", "/test.json", "sessionId"));
     }
 
     @Test
     void testStart_nonExistingFile() {
-        assertThatThrownBy(() -> mongoHandler.reset("test", "/notFound.json"))
+        assertThatThrownBy(() -> mongoHandler.reset("test", "/notFound.json", "sessionId"))
                 .isInstanceOf(ApiException.class)
                 .extracting(ex -> (ApiException) ex)
                 .extracting(ApiException::getMessage)
@@ -27,6 +27,6 @@ class MongoHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> mongoHandler.runQuery("test", "{ _id: \"5677d313fad7da08e362a512\" }", 1));
+        assertDoesNotThrow(() -> mongoHandler.runQuery("test", "{ _id: \"5677d313fad7da08e362a512\" }", 1, "sessionId"));
     }
 }

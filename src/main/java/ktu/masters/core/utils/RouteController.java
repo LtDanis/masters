@@ -55,8 +55,9 @@ public class RouteController {
     public static Object runQuery(Request request, Response response) {
         String colName = request.params(":colName");
         String dbType = request.params(":dbType");
+        String sessionId = request.queryParams(":sessionId");
         DbHandler handler = findByType(DatabaseType.parse(dbType));
-        return handler.runQuery(colName, request.body(), 1).get(0);
+        return handler.runQuery(colName, request.body(), 1, sessionId).get(0);
     }
 
     public static Object readResults(Request request, Response response) {

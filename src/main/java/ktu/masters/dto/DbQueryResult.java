@@ -10,4 +10,5 @@ public class DbQueryResult {
     QueryType type;
     DatabaseType db;
     List<String> timesTaken;
+    long avg;
 }

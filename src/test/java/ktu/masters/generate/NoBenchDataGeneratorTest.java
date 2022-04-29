@@ -33,7 +33,7 @@ class NoBenchDataGeneratorTest {
         assertThat(actual)
                 .extracting(obj -> obj.get("bool").asBoolean())
                 .filteredOn(TRUE::equals)
-                .hasSizeBetween(490, 510);
+                .hasSizeBetween(485, 515);
         assertThat(actual)
                 .noneMatch(v -> v.get("str1").equals(v.get("str2")));
     }

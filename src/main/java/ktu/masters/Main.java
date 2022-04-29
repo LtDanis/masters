@@ -3,11 +3,13 @@ package ktu.masters;
 import ktu.masters.core.utils.JsonTransformer;
 import ktu.masters.core.utils.RouteController;
 import ktu.masters.exception.ApiException;
+import lombok.extern.log4j.Log4j;
 import spark.Spark;
 
 import static java.util.Objects.isNull;
 import static spark.Spark.exception;
 
+@Log4j
 public class Main {
     private static final int PORT = 4567;
 
@@ -35,6 +37,7 @@ public class Main {
             response.type("application/json");
             response.status(exception.getStatus());
             response.body(exception.toJson());
+            log.error("Error", exception);
         });
     }
 }

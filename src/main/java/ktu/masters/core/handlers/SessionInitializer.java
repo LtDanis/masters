@@ -13,9 +13,10 @@ import static ktu.masters.core.utils.HandlersHelper.findByType;
 @RequiredArgsConstructor
 public class SessionInitializer implements Handler<SessionRequest, SessionResponse> {
     public SessionResponse handle(SessionRequest request) {
-        SessionResponse sessionResponse = new SessionResponse(formatSessionId(request));
+        String sessionId = formatSessionId(request);
+        SessionResponse sessionResponse = new SessionResponse(sessionId);
         if (request.isReloadDatabase())
-            reloadDatabase(request.getTypes(), request.getFileName(), request.getDatabaseName());
+            reloadDatabase(request.getTypes(), request.getFileName(), request.getDatabaseName(), sessionId);
         return sessionResponse;
     }
 
@@ -23,8 +24,8 @@ public class SessionInitializer implements Handler<SessionRequest, SessionRespon
         return String.format("%s-%s", request.getUserId(), LocalDateTime.now());
     }
 
-    private void reloadDatabase(List<DatabaseType> types, String fileName, String databaseName) {
+    private void reloadDatabase(List<DatabaseType> types, String fileName, String databaseName, String sessionId) {
         for (DatabaseType type : types)
-            findByType(type).reset(databaseName, fileName);
+            findByType(type).reset(databaseName, fileName, sessionId);
     }
 }

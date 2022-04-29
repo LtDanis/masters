@@ -24,11 +24,10 @@ public class HandlersHelper {
     public static final CloudantClient COUCH_DB_CONN = initCouchConnection();
     public static final AerospikeClient AEROSPIKE_DB_CONN = new AerospikeClient("127.0.0.1", 3000);
 
-    private static final List<DbHandler> DB_HANDLERS = List.of(
-            new MongoHandler(MONGO_DB_CONN),
-            new CouchDBHandler(COUCH_DB_CONN),
-            new AerospikeDBHandler(AEROSPIKE_DB_CONN)
-    );
+    public static final MongoHandler MONGO_HANDLER = new MongoHandler(MONGO_DB_CONN);
+    public static final CouchDBHandler COUCH_HANDLER = new CouchDBHandler(COUCH_DB_CONN);
+    public static final AerospikeDBHandler AEROSPIKE_HANDLER = new AerospikeDBHandler(AEROSPIKE_DB_CONN);
+    public static final List<DbHandler> DB_HANDLERS = List.of(MONGO_HANDLER, COUCH_HANDLER, AEROSPIKE_HANDLER);
 
     public static DbHandler findByType(DatabaseType type) {
         return DB_HANDLERS.stream()

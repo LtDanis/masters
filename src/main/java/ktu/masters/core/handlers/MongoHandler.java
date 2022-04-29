@@ -35,7 +35,7 @@ public class MongoHandler implements DbHandler {
     }
 
     @Override
-    public void reset(String colName, String fileName) {
+    public void reset(String colName, String fileName, String sessionId) {
         MongoCollection<Document> coll = dbCon.getCollection(colName);
         coll.drop(); //drop previous import
         List<InsertOneModel<Document>> docs = new ArrayList<>();
@@ -47,7 +47,7 @@ public class MongoHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, String query) {
+    public void run(String colName, String query, String sessionId) {
         try (MongoCursor<Document> cursor = dbCon.getCollection(colName).find(Document.parse(query)).iterator()) {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
@@ -86,6 +86,6 @@ public class MongoHandler implements DbHandler {
 
     private void singleBulkWrite(MongoCollection<Document> coll, List<InsertOneModel<Document>> docs) {
         BulkWriteResult bulkWriteResult = coll.bulkWrite(docs, new BulkWriteOptions().ordered(false));
-        System.out.println("Inserted" + bulkWriteResult);
+        System.out.println("Inserted " + bulkWriteResult);
     }
 }

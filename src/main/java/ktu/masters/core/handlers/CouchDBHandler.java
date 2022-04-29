@@ -2,6 +2,7 @@ package ktu.masters.core.handlers;
 
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
+import com.google.common.collect.Lists;
 import ktu.masters.dto.DatabaseType;
 import ktu.masters.exception.ApiException;
 import org.json.simple.parser.JSONParser;
@@ -25,16 +26,14 @@ public class CouchDBHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, String query) {
+    public void run(String colName, String query, String sessionId) {
         Database database = dbConn.database(colName, true);
         List<Object> docs = database.query(query, Object.class).getDocs();
-        for (Object item : docs) {
-            System.out.println(item);
-        }
+        docs.forEach(System.out::println);
     }
 
     @Override
-    public void reset(String colName, String fileName) {
+    public void reset(String colName, String fileName, String sessionId) {
         dbConn.deleteDB(colName);
         Database database = dbConn.database(colName, true);
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
@@ -53,7 +52,6 @@ public class CouchDBHandler implements DbHandler {
     private void writeFromFile(BufferedReader br, Database db) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         @SuppressWarnings("unchecked") List<Object> json = (List<Object>) parser.parse(br);
-        for (Object item : json)
-            db.post(item);
+        Lists.partition(json, BATCH_SIZE).forEach(db::bulk);
     }
 }
