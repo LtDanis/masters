@@ -38,13 +38,17 @@ public class SessionDatabase {
 
     public static void printAverageTimeTaken(String sessionId) {
         SessionData sessionData = SESSION_DATA_MAP.get(sessionId);
-        Map<QueryType, List<DbQueryResult>> collect = sessionData.getResults().stream()
+        Map<QueryType, List<DbQueryResult>> groupedByType = sessionData.getResults().stream()
                 .collect(Collectors.groupingBy(DbQueryResult::getType, toList()));
-        collect.forEach((key, value) -> {
-            System.out.printf("Result times in nanos for %s%n", key);
-            value.forEach(result ->
-                    System.out.printf("  %s %s -> %s (%ss)%n",
-                            result.getDb(), result.getName(), result.getAvg(), nanosToSeconds(result.getAvg())));
+        groupedByType.forEach((type, valueByType) -> {
+            System.out.printf("Result times in nanos for %s%n", type);
+            Map<String, List<DbQueryResult>> byName = valueByType.stream()
+                    .collect(Collectors.groupingBy(DbQueryResult::getName, toList()));
+            byName.forEach((name, valueByName) -> {
+                System.out.printf("  %s%n", name);
+                valueByName.forEach(result -> System.out.printf("    %s %s -> %s (%ss)%n",
+                        result.getDb(), result.getName(), result.getAvg(), nanosToSeconds(result.getAvg())));
+            });
         });
     }
 
@@ -57,7 +61,7 @@ public class SessionDatabase {
         collect.forEach((key, value) -> {
             System.out.printf("Result times in milliseconds for %s%n", key);
             value.forEach(result ->
-                    System.out.printf("  %s %s -> %s%n", result.getType(), result.getName(), result.getTimesTaken()));
+                    System.out.printf("  %s -> %s%n", result.getType(), result.getTimesTaken()));
         });
     }
 
