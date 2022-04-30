@@ -41,7 +41,7 @@ public class SessionDatabase {
         Map<QueryType, List<DbQueryResult>> collect = sessionData.getResults().stream()
                 .collect(Collectors.groupingBy(DbQueryResult::getType, toList()));
         collect.forEach((key, value) -> {
-            System.out.printf("Result times in milliseconds for %s%n", key);
+            System.out.printf("Result times in nanos for %s%n", key);
             value.forEach(result ->
                     System.out.printf("  %s %s -> %s (%ss)%n",
                             result.getDb(), result.getName(), result.getAvg(), nanosToSeconds(result.getAvg())));
