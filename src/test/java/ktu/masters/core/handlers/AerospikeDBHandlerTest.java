@@ -1,5 +1,6 @@
 package ktu.masters.core.handlers;
 
+import ktu.masters.dto.QueryType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,6 @@ class AerospikeDBHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> aerospikeDBHandler.runQuery("test", List.of("$.*"), 1, SESSION_ID));
+        assertDoesNotThrow(() -> aerospikeDBHandler.runQuery("test", QueryType.SEARCH, List.of("$.*"), 1, SESSION_ID));
     }
 }

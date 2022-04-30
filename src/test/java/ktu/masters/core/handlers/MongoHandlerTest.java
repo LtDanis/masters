@@ -1,5 +1,6 @@
 package ktu.masters.core.handlers;
 
+import ktu.masters.dto.QueryType;
 import ktu.masters.exception.ApiException;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +30,6 @@ class MongoHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> mongoHandler.runQuery("test", List.of("{ _id: \"5677d313fad7da08e362a512\" }"), 1, "sessionId"));
+        assertDoesNotThrow(() -> mongoHandler.runQuery("test", QueryType.SEARCH, List.of("{ _id: \"5677d313fad7da08e362a512\" }"), 1, "sessionId"));
     }
 }

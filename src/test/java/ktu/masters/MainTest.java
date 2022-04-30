@@ -63,7 +63,7 @@ class MainTest {
 
     @Test
     void acceptanceTest_queryRun() throws UnirestException {
-        HttpResponse<String> response = Unirest.post(BASE_URL + "/run/MONGO/test")
+        HttpResponse<String> response = Unirest.post(BASE_URL + "/run/MONGO/test/SEARCH/ABC")
                 .body("{ _id: \"5677d313fad7da08e362a512\" }")
                 .asString();
 

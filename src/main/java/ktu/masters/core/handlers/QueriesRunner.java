@@ -17,7 +17,12 @@ public class QueriesRunner implements Handler<RunQueriesRequest, SessionResponse
         SessionDatabase.reset(sessionId);
         sessionRequest.getQuerySet().forEach(querySet -> querySet.getQueries().forEach(query -> {
             DbHandler handler = findByType(query.getDb());
-            List<Long> timesTaken = handler.runQuery(sessionRequest.getColName(), query.getQuery(), sessionRequest.getNumberOfRuns(), sessionId);
+            List<Long> timesTaken = handler.runQuery(sessionRequest.getColName(),
+                    querySet.getType(),
+                    query.getQuery(),
+                    sessionRequest.getNumberOfRuns(),
+                    sessionId
+            );
             long avg = timesTaken.stream()
                     .reduce(0L, Long::sum) / timesTaken.size();
             DbQueryResult dbQueryResult = new DbQueryResult(querySet.getName(), querySet.getType(), query.getDb(), reformatTimes(timesTaken), avg);

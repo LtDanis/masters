@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.InsertOneModel;
 import ktu.masters.dto.DatabaseType;
+import ktu.masters.dto.QueryType;
 import ktu.masters.exception.ApiException;
 import org.bson.Document;
 import org.json.simple.JSONObject;
@@ -17,14 +18,15 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.mongodb.client.model.Projections.fields;
 import static com.mongodb.client.model.Projections.include;
 import static java.util.Objects.requireNonNull;
 import static ktu.masters.core.utils.Helper.CONSUMER_FUNCTION;
+import static ktu.masters.dto.QueryType.GROUP;
+import static ktu.masters.dto.QueryType.SEARCH;
 
 public class MongoHandler implements DbHandler {
     private final MongoDatabase dbCon;
@@ -51,17 +53,29 @@ public class MongoHandler implements DbHandler {
     }
 
     @Override
-    public void run(String colName, List<String> query, String sessionId) {
+    public void run(String colName, QueryType type, List<String> query, String sessionId) {
+        Set<Object> seen = new HashSet<>();
+        AtomicLong count = new AtomicLong(0L);
         try (MongoCursor<Document> cursor = getCursor(colName, query).iterator()) {
-            while (cursor.hasNext()) {
-                CONSUMER_FUNCTION.accept(cursor.next().toJson());
+            if (SEARCH.equals(type)) {
+                while (cursor.hasNext()) {
+                    CONSUMER_FUNCTION.accept(cursor.next());
+                }
+            } else if (GROUP.equals(type)) {
+                while (cursor.hasNext()) {
+                    Object val = cursor.next().get(query.get(1));
+                    if (!seen.contains(val))
+                        count.incrementAndGet();
+                    seen.add(val);
+                }
+            } else {
+                throw new ApiException(500, "Unsupported query type for MONGO db - " + type);
             }
         }
     }
 
     private FindIterable<Document> getCursor(String colName, List<String> query) {
-        FindIterable<Document> findIterable = dbCon.getCollection(colName)
-                .find(Document.parse(query.get(0)));
+        FindIterable<Document> findIterable = dbCon.getCollection(colName).find(Document.parse(query.get(0)));
         if (query.size() == 1)
             return findIterable;
         return findIterable.projection(fields(include(getFields(query))));

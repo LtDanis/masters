@@ -26,9 +26,9 @@ class QueriesRunnerIntegrationTest {
     void aerospikeError() {
         String sessId = "NOT_FOUND";
         RunQueriesRequest req = new RunQueriesRequest(sessId, "test", 2, List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
-                new Query(DatabaseType.MONGO, "{ ord_qty: 501 }"),
-                new Query(DatabaseType.COUCH_DB, couchQuery()),
-                new Query(DatabaseType.AEROSPIKE, "$.*")
+                new Query(DatabaseType.MONGO, List.of("{ ord_qty: 501 }")),
+                new Query(DatabaseType.COUCH_DB, List.of(couchQuery())),
+                new Query(DatabaseType.AEROSPIKE, List.of("$.*"))
         ))));
 
         assertThatThrownBy(() -> runner.handle(req))
@@ -41,9 +41,9 @@ class QueriesRunnerIntegrationTest {
         String sessId = "ABC";
         initKeys(AEROSPIKE_HANDLER, sessId);
         RunQueriesRequest req = new RunQueriesRequest(sessId, "test", 2, List.of(new QuerySet("test1", QueryType.SEARCH, List.of(
-                new Query(DatabaseType.MONGO, "{ ord_qty: 501 }"),
-                new Query(DatabaseType.COUCH_DB, couchQuery()),
-                new Query(DatabaseType.AEROSPIKE, "$.*")
+                new Query(DatabaseType.MONGO, List.of("{ ord_qty: 501 }")),
+                new Query(DatabaseType.COUCH_DB, List.of(couchQuery())),
+                new Query(DatabaseType.AEROSPIKE, List.of("$.*"))
         ))));
 
         SessionResponse resp = runner.handle(req);

@@ -1,5 +1,6 @@
 package ktu.masters.core.handlers;
 
+import ktu.masters.dto.QueryType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,7 +18,7 @@ class CouchDBHandlerTest {
 
     @Test
     void testRunQueries() {
-        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", List.of(couchQuery()), 1, "sessionId"));
+        assertDoesNotThrow(() -> couchDBHandler.runQuery("test", QueryType.SEARCH, List.of(couchQuery()), 1, "sessionId"));
     }
 
     static String couchQuery() {
