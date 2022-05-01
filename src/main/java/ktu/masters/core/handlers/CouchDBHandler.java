@@ -4,22 +4,19 @@ import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
 import com.google.common.collect.Lists;
 import ktu.masters.dto.DatabaseType;
+import ktu.masters.dto.Pair;
 import ktu.masters.dto.QueryType;
 import ktu.masters.exception.ApiException;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.Objects.requireNonNull;
 import static ktu.masters.core.utils.Helper.CONSUMER_FUNCTION;
-import static ktu.masters.dto.QueryType.GROUP;
-import static ktu.masters.dto.QueryType.SEARCH;
+import static ktu.masters.dto.QueryType.*;
 
 public class CouchDBHandler implements DbHandler {
     private final CloudantClient dbConn;
@@ -48,9 +45,28 @@ public class CouchDBHandler implements DbHandler {
                     count.incrementAndGet();
                 seen.add(val);
             });
+        } else if (JOIN.equals(type)) {
+            System.out.println(
+                    docs.stream()
+                            .flatMap(obj1 -> docs.stream()
+                                    .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
+                                    .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
+                                    .map(obj2 -> new Pair<>(obj1, obj2)))
+                            .count()
+            );
         } else {
             throw new ApiException(500, "Unsupported query type for MONGO db - " + type);
         }
+    }
+
+    private boolean isEqualValues(Map obj1, String key1, Map obj2, String key2) {
+        Object v1 = obj1;
+        for (String tempPath1 : List.of(key1.split("\\.")))
+            v1 = ((Map) v1).get(tempPath1);
+        Object v2 = obj2;
+        for (String tempPath2 : List.of(key2.split("\\.")))
+            v2 = ((Map) v2).get(tempPath2);
+        return Objects.equals(v1, v2);
     }
 
     @Override
