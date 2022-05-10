@@ -60,11 +60,13 @@ public class MongoHandler implements DbHandler {
         try (MongoCursor<Document> cursor = getCursor(colName, query).iterator()) {
             if (SEARCH.equals(type)) {
                 while (cursor.hasNext()) {
-                    CONSUMER_FUNCTION.accept(cursor.next());
+                    CONSUMER_FUNCTION.accept(cursor.next().toJson());
                 }
             } else if (GROUP.equals(type)) {
                 while (cursor.hasNext()) {
-                    Object val = cursor.next().get(query.get(1));
+                    Document doc = cursor.next();
+                    doc.toJson();
+                    Object val = doc.get(query.get(1));
                     if (!seen.contains(val))
                         count.incrementAndGet();
                     seen.add(val);
@@ -73,14 +75,14 @@ public class MongoHandler implements DbHandler {
                 while (cursor.hasNext()) {
                     all.add(cursor.next());
                 }
-                System.out.println(
-                        all.stream()
-                                .flatMap(obj1 -> all.stream()
-                                        .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
-                                        .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
-                                        .map(obj2 -> new Pair<>(obj1, obj2)))
-                                .count()
-                );
+                long t = all.stream()
+                        .peek(Document::toJson)
+                        .flatMap(obj1 -> all.stream()
+                                .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
+                                .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
+                                .peek(Document::toJson)
+                                .map(obj2 -> new Pair<>(obj1, obj2)))
+                        .count();
             } else {
                 throw new ApiException(500, "Unsupported query type for MONGO db - " + type);
             }

@@ -11,7 +11,7 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.9.3'
     implementation 'com.h2database:h2:2.1.212'
 
-    implementation 'org.mongodb:mongo-java-driver:3.12.10'
+    implementation 'org.mongodb:mongo-java-driver:3.12.11'
     implementation 'org.mongodb:mongodb-driver-sync:4.6.0'
     implementation 'com.cloudant:cloudant-client:2.20.1'
     implementation 'com.aerospike:aerospike-client:6.0.0'

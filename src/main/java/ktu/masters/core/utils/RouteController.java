@@ -1,6 +1,9 @@
 package ktu.masters.core.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder;
@@ -58,7 +61,16 @@ public class RouteController {
         QueryType queryType = QueryType.parse(request.params(":queryType"));
         String sessionId = request.params(":sessionId");
         DbHandler handler = findByType(DatabaseType.parse(dbType));
-        return handler.runQuery(colName, queryType, List.of(request.body()), 1, sessionId).get(0);
+        return handler.runQuery(colName, queryType, parseJsonQuery(request), 1, sessionId).get(0);
+    }
+
+    private static List<String> parseJsonQuery(Request request) {
+        try {
+            return new ObjectMapper().readValue(request.body(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new ApiException(400, e, "Failed to parse JSON");
+        }
     }
 
     public static Object readResults(Request request, Response response) {

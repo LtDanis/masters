@@ -39,7 +39,7 @@ class NoBenchDataGeneratorTest {
     }
 
     @Test
-    @Timeout(value = 30)
+    @Timeout(value = 60)
     void testOneMillion() {
         List<JsonNode> actual = generator.generate(1000_000);
 

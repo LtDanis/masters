@@ -33,7 +33,7 @@ class QueriesRunnerIntegrationTest {
 
         assertThatThrownBy(() -> runner.handle(req))
                 .isInstanceOf(ApiException.class)
-                .hasMessageContaining("Aerospike cannot run queries without loaded Keys");
+                .hasMessageContaining("Failed to fetch Aerospike query");
     }
 
     @Test

@@ -46,14 +46,12 @@ public class CouchDBHandler implements DbHandler {
                 seen.add(val);
             });
         } else if (JOIN.equals(type)) {
-            System.out.println(
-                    docs.stream()
-                            .flatMap(obj1 -> docs.stream()
-                                    .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
-                                    .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
-                                    .map(obj2 -> new Pair<>(obj1, obj2)))
-                            .count()
-            );
+            long t = docs.stream()
+                    .flatMap(obj1 -> docs.stream()
+                            .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
+                            .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
+                            .map(obj2 -> new Pair<>(obj1, obj2)))
+                    .count();
         } else {
             throw new ApiException(500, "Unsupported query type for MONGO db - " + type);
         }

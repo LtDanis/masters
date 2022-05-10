@@ -112,15 +112,14 @@ public class AerospikeDBHandler implements DbHandler {
             AtomicLong count = new AtomicLong(0L);
             for (Key key : loadKeys(sessionId))
                 readForKey(colName, type, query, key, count, seen, all);
-            if (!all.isEmpty() && JOIN.equals(type))
-                System.out.println(
-                        all.stream()
-                                .flatMap(obj1 -> all.stream()
-                                        .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
-                                        .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
-                                        .map(obj2 -> new Pair<>(obj1, obj2)))
-                                .count()
-                );
+            if (!all.isEmpty() && JOIN.equals(type)) {
+                long t = all.stream()
+                        .flatMap(obj1 -> all.stream()
+                                .filter(obj2 -> !Objects.equals(obj1.get("_id"), obj2.get("_id")))
+                                .filter(obj2 -> isEqualValues(obj1, query.get(1), obj2, query.get(2)))
+                                .map(obj2 -> new Pair<>(obj1, obj2)))
+                        .count();
+            }
         } catch (Exception e) {
             throw new ApiException(500, e, "Failed to fetch Aerospike query");
         }
