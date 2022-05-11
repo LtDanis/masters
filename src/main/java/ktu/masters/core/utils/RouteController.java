@@ -61,7 +61,8 @@ public class RouteController {
         QueryType queryType = QueryType.parse(request.params(":queryType"));
         String sessionId = request.params(":sessionId");
         DbHandler handler = findByType(DatabaseType.parse(dbType));
-        return handler.runQuery(colName, queryType, parseJsonQuery(request), 1, sessionId).get(0);
+        List<String> query = parseJsonQuery(request);
+        return handler.runQuery(colName, queryType, query, 1, sessionId).get(0);
     }
 
     private static List<String> parseJsonQuery(Request request) {
